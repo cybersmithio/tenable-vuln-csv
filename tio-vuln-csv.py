@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #
-# Takes a Tenable.io asset data and generates a CSV report.
-# The output file is called tio-asset-download.csv
+# Takes a Tenable.io vulnerability data and generates a CSV report.
+# The output file is called tio-vuln-download.csv
 #
 # Example usage with environment variables:
 # TIOACCESSKEY="********************"; export TIOACCESSKEY
@@ -9,7 +9,9 @@
 # ./tio-asset-download.py
 #
 # This script requires the Tenable.io Python SDK to be installed.
-# If this is not already done, then run pip install tenable_io
+# If this is not already done, then run pip install pytenable
+#
+# To add more fields, just update the fieldnames variable in the GenerateVulnCSV function.
 #
 
 import json
@@ -33,7 +35,9 @@ def GenerateVulnCSV(DEBUG,accesskey, secretkey, host, port,filename):
     #Open the file that will become a CSV
     with open(filename,"w") as csvfile:
         #Create the header of the CSV file
-        fieldnames=['plugin.id','plugin.name','first_found','last_found','plugin.publication_date','plugin.patch_publication_date']
+        #The field names should be the same as what comes from the API.  For fields nested inside other fields (i.e. {'plugin': {'id': 19506}})
+        # then separate the field names with a dot (.) (i.e. "plugin.id")
+        fieldnames=['severity','plugin.cvss3_base_score','plugin.id','plugin.cve','plugin.name','first_found','last_found','plugin.publication_date','plugin.patch_publication_date','plugin.vpr.score','asset.ipv4','asset.agent_uuid','asset.hostname']
 
         #Create a CSV writer and associate with the file handle
         writer=csv.DictWriter(csvfile,fieldnames=fieldnames)
