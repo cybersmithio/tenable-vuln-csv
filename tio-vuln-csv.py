@@ -27,9 +27,13 @@ import re
 def GenerateVulnCSV(DEBUG,accesskey, secretkey, host, port,filename):
     #Create the connection to Tenable.io
 
+    if DEBUG:
+        print("Connecting to Tenable.io")
     tio = TenableIO(accesskey, secretkey)
 
     #Gather the list of assets
+    if DEBUG:
+        print("Making request to Tenable.io for vulnerability export")
     vulns = tio.exports.vulns()
 
     #Open the file that will become a CSV
@@ -111,6 +115,6 @@ else:
 
 
 #Download the asset list into a CSV
-GenerateVulnCSV(DEBUG,accesskey, secretkey, host, port,"tio-vuln-download.csv")
+GenerateVulnCSV(DEBUG, accesskey, secretkey, host, port, "tio-vuln-download.csv")
 
 
